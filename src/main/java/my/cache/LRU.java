@@ -61,9 +61,16 @@ public class LRU<T> {
         }
     }
 
+    /**
+     * Самый старый и самый новый элементы кеша.
+     */
     private Node lruElement, mruElement;
 
     private int size;
+
+    /**
+     * Содержит все эелементы кэша вместе. Обеспечивает время доступа О(1).
+     */
     private List<Node> cachedData = new ArrayList<>(size);
 
     public LRU(int size) {
@@ -105,14 +112,14 @@ public class LRU<T> {
 
     public void put(T element) {
         Node node = new Node(element);
-        if (cachedData.size() == size) {
-            // Удаляем наименее используемый элемент
-            cachedData.remove(lruElement);
-            Node next = lruElement.getNext();
-            next.setPrev(null);
-            lruElement = next;
-        }
         if (!cachedData.contains(node)) {
+            if (cachedData.size() == size) {
+                // Удаляем наименее используемый элемент
+                cachedData.remove(lruElement);
+                Node next = lruElement.getNext();
+                next.setPrev(null);
+                lruElement = next;
+            }
             if (cachedData.size() == 0) {
                 mruElement = node;
             } else {
